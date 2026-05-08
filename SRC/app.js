@@ -2,6 +2,10 @@ import express from "express";
 import productsRouter from "./routes/products.router.js";
 import cartsRouter from "./routes/carts.router.js";
 
+// 🔥 NUEVO
+import { connectDB } from "./config/db.js";
+import { ProductModel } from "./models/product.model.js";
+
 const app = express();
 const PORT = 8080;
 
@@ -9,13 +13,30 @@ const PORT = 8080;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// 🔥 Conexión a MongoDB
+connectDB();
+
 // Rutas
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
 
-// Ruta de prueba
+// Ruta principal
 app.get("/", (req, res) => {
   res.send("Servidor funcionando");
+});
+
+// 🔥 RUTA DE PRUEBA
+app.get("/test-product", async (req, res) => {
+  const product = await ProductModel.create({
+    title: "Producto de prueba",
+    description: "Esto es una prueba",
+    code: "ABC123",
+    price: 100,
+    stock: 10,
+    category: "test",
+  });
+
+  res.json(product);
 });
 
 // Levantar servidor
