@@ -1,8 +1,8 @@
 import { ProductModel } from "../models/product.model.js";
 
 export default class ProductDAO {
-  async getProducts() {
-    return await ProductModel.find();
+  async getProducts(query = {}, options = {}) {
+    return await ProductModel.paginate(query, options);
   }
 
   async getProductById(id) {

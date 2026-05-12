@@ -5,34 +5,42 @@ const router = Router();
 
 const productDAO = new ProductDAO();
 
-// GET todos los productos
+// GET producto por ID
 router.get("/", async (req, res) => {
   try {
-    const products = await productDAO.getProducts();
+    const { limit = 10, page = 1, query, sort } = req.query;
 
-    res.json(products);
+    // Filtro
+    const filter = {};
+
+    if (query) {
+      filter.category = query;
+    }
+
+    // Orden
+    const options = {
+      limit,
+      page,
+      sort: sort ? { price: sort === "asc" ? 1 : -1 } : {},
+    };
+
+    const result = await productDAO.getProducts(filter, options);
+
+    res.json({
+      status: "success",
+      payload: result.docs,
+      totalPages: result.totalPages,
+      prevPage: result.prevPage,
+      nextPage: result.nextPage,
+      page: result.page,
+      hasPrevPage: result.hasPrevPage,
+      hasNextPage: result.hasNextPage,
+      prevLink: null,
+      nextLink: null,
+    });
   } catch (error) {
     res.status(500).json({
       error: "Error al obtener productos",
-    });
-  }
-});
-
-// GET producto por ID
-router.get("/:pid", async (req, res) => {
-  try {
-    const product = await productDAO.getProductById(req.params.pid);
-
-    if (!product) {
-      return res.status(404).json({
-        error: "Producto no encontrado",
-      });
-    }
-
-    res.json(product);
-  } catch (error) {
-    res.status(500).json({
-      error: "Error al buscar producto",
     });
   }
 });

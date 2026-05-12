@@ -25,20 +25,6 @@ app.get("/", (req, res) => {
   res.send("Servidor funcionando");
 });
 
-// 🔥 RUTA DE PRUEBA
-app.get("/test-product", async (req, res) => {
-  const product = await ProductModel.create({
-    title: "Producto de prueba",
-    description: "Esto es una prueba",
-    code: "ABC123",
-    price: 100,
-    stock: 10,
-    category: "test",
-  });
-
-  res.json(product);
-});
-
 // Levantar servidor
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);
