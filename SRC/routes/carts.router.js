@@ -82,25 +82,18 @@ router.put("/:cid/products/:pid", async (req, res) => {
   }
 });
 
-// Actualizar cantidad de producto
-router.put("/:cid/products/:pid", async (req, res) => {
+// Reemplazar carrito completo
+router.put("/:cid", async (req, res) => {
   try {
-    const { quantity } = req.body;
-
-    const updatedCart = await cartDAO.updateProductQuantity(
-      req.params.cid,
-      req.params.pid,
-      quantity,
-    );
+    const updatedCart = await cartDAO.updateCart(req.params.cid, req.body);
 
     res.json(updatedCart);
   } catch (error) {
     res.status(500).json({
-      error: "Error al actualizar cantidad",
+      error: "Error al actualizar carrito",
     });
   }
 });
-
 // Vaciar carrito
 router.delete("/:cid", async (req, res) => {
   try {

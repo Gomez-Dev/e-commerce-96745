@@ -21,6 +21,7 @@
   "homepage": "https://github.com/Gomez-Dev/e-commerce-96745#readme",
   "dependencies": {
     "express": "^5.2.1",
+    "express-handlebars": "^9.0.1",
     "mongoose": "^9.5.0",
     "mongoose-paginate-v2": "^1.9.4",
     "socket.io": "^4.8.3"

@@ -125,4 +125,19 @@ export default class CartDAO {
 
     return await CartModel.findById(cartId).populate("products.product");
   }
+
+  // Reemplazar productos del carrito
+  async updateCart(cartId, products) {
+    const cart = await CartModel.findById(cartId);
+
+    if (!cart) {
+      throw new Error("Carrito no encontrado");
+    }
+
+    cart.products = products;
+
+    await cart.save();
+
+    return await CartModel.findById(cartId).populate("products.product");
+  }
 }

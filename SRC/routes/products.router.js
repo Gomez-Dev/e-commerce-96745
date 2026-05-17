@@ -50,6 +50,15 @@ router.post("/", async (req, res) => {
   try {
     const newProduct = await productDAO.createProduct(req.body);
 
+    // Obtener io
+    const io = req.app.get("io");
+
+    // Obtener productos actualizados
+    const products = await productDAO.getProducts();
+
+    // Emitir actualización
+    io.emit("products", products.docs || products);
+
     res.status(201).json(newProduct);
   } catch (error) {
     res.status(500).json({
