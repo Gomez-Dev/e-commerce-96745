@@ -50,17 +50,20 @@ router.post("/", async (req, res) => {
   try {
     const newProduct = await productDAO.createProduct(req.body);
 
-    // Obtener io
+    // Socket.io
     const io = req.app.get("io");
 
-    // Obtener productos actualizados
+    // Buscar productos actualizados
     const products = await productDAO.getProducts();
 
-    // Emitir actualización
-    io.emit("products", products.docs || products);
+    // Emitir productos
+    io.emit("products", products);
 
+    // Respuesta
     res.status(201).json(newProduct);
   } catch (error) {
+    console.log(error);
+
     res.status(500).json({
       error: "Error al crear producto",
     });
@@ -83,7 +86,7 @@ router.put("/:pid", async (req, res) => {
   }
 });
 
-// DELETE eliminar producto
+// DELETE producto
 router.delete("/:pid", async (req, res) => {
   try {
     await productDAO.deleteProduct(req.params.pid);
@@ -97,5 +100,4 @@ router.delete("/:pid", async (req, res) => {
     });
   }
 });
-
 export default router;
